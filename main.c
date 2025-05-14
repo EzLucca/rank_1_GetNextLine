@@ -30,7 +30,7 @@ int main(void)
 		if (!next_line)
 			break ;
 		count++;
-		printf("[%d]:%s\n", count, next_line); //count is to show you the line numbers
+		printf("[%d] -> %s\n", count, next_line); //count is to show you the line numbers
 		free (next_line);
 		next_line = NULL;
 	}
