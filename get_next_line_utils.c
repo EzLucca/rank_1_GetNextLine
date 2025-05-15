@@ -6,7 +6,7 @@
 /*   By: edlucca <edlucca@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 12:00:41 by edlucca           #+#    #+#             */
-/*   Updated: 2025/05/15 17:28:36 by edlucca          ###   ########.fr       */
+/*   Updated: 2025/05/15 21:26:36 by edlucca          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,18 @@ size_t	ft_strlen(const char *s)
 	while (*s++)
 		++p;
 	return (p);
+}
+
+void	ft_bzero(void *s, size_t n)
+{
+	char	*temp_ptr;
+
+	temp_ptr = (char *) s;
+	while (n > 0)
+	{
+		*(temp_ptr++) = 0;
+		n--;
+	}
 }
 
 char	*ft_strchr(const char *s, int c)
@@ -85,4 +97,19 @@ char	*ft_strdup(const char *s)
 		newstr[i] = '\0';
 	}
 	return (newstr);
+}
+
+void	*ft_calloc(size_t nmemb, size_t size)
+{
+	void	*tmp;
+	size_t	nb_bytes;
+
+	nb_bytes = nmemb * size;
+	if (size && (nb_bytes / size) != nmemb)
+		return (NULL);
+	tmp = malloc(nb_bytes);
+	if (!tmp)
+		return (NULL);
+	ft_bzero(tmp, nb_bytes);
+	return (tmp);
 }
