@@ -34,6 +34,10 @@ test:
 	@./output
 	@rm -f output
 
+# Use with gdb
+gdbtest: 
+	@cc $(SRCS) -g main.c -o output
+
 # Used for memory testing
 memorytest: 
 	@cc $(MEMORY) $(SRCS) main.c -o output
