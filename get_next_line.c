@@ -12,10 +12,26 @@
 
 #include "get_next_line.h"
 
-char *read_from_file(int fd, char *buffer, int *bytes_read)
+char	*ft_strchr(const char *s, int c)
+{
+	int	i;
+
+	c = (unsigned char) c;
+	i = 0;
+	while (s[i])
+	{
+		if (s[i] == c)
+			return ((char *) &s[i]);
+		i++;
+	}
+	if (s[i] == c)
+		return ((char *) &s[i]);
+	return (NULL);
+}
+
+static char *read_from_file(int fd, char *buffer, int *bytes_read)
 {
 	char	*tmp_buffer;
-	char	*temp;
 
 	if (!buffer)
 		buffer = ft_calloc(1, sizeof(char));
@@ -30,68 +46,49 @@ char *read_from_file(int fd, char *buffer, int *bytes_read)
 			free(buffer);
 			return (NULL);
 		}
+		if (*bytes_read == 0)
+			break;
 		tmp_buffer[*bytes_read] = '\0';
-		temp = buffer;
-		buffer = ft_strjoin(temp, tmp_buffer);
-		free(temp);
+		buffer = ft_strjoin(buffer, tmp_buffer);
 	}
 	free(tmp_buffer);
 	return (buffer);
 }
 
+static char	*rest_of_line(const char *s, int c)
+{
+	int	i;
+
+	c = (unsigned char) c;
+	i = 0;
+	while (s[i])
+	{
+		if (s[i] == c)
+			return ((char *) &s[i+1]);
+		i++;
+	}
+	if (s[i] == c)
+		return ((char *) &s[i+1]);
+	return (NULL);
+}
+
 static char *filtered(char *buffer)
 {
 	int	i;
-	char *line_filtered;
+	char *line_to_return;
 
-	i = 0;
 	if (!buffer || !buffer[i])
 		return (NULL);
-	while(buffer[i] && buffer[i] != '\n')
-		i++;
-	line_filtered = ft_calloc(i + 2, sizeof(char));
-	if (!line_filtered)
+	i = ft_strlen(buffer) - ft_strlen(rest_of_line(buffer, '\n'));
+	line_to_return = ft_calloc(i + 2, sizeof(char));
+	if (!line_to_return)
 		return (NULL);
-	i = 0;
-	while (buffer[i] && buffer[i] != '\n')
-	{
-		line_filtered[i] = buffer[i];
-		i++;
-	}
-	if (buffer[i] == '\n')
-	{
-		line_filtered[i] = buffer[i];
-		i++;
-	}
-	return (line_filtered);
+	ft_memcpy(line_to_return, buffer, i);
+	return (line_to_return);
 }
 
-static char *rest_of(char *buffer)
-{
-	int i;
-	int	j;
-	char *rest_line;
 
-	i = 0;
-	while (buffer[i] && buffer[i] != '\n')
-		i++;
-	if (!buffer[i])
-	{
-		free(buffer);
-		return (NULL);
-	}
-	rest_line = ft_calloc((ft_strlen(buffer) - i + 1), sizeof(char));
-	if (!rest_line)
-		return (NULL);
-	i++;
-	j = 0;
-	while (buffer[i])
-		rest_line[j++] = buffer[i++];
-	free(buffer);
-	return (rest_line);
-}
-
-char *get_next_line(int fd)
+char	*get_next_line(int fd)
 {
 	char *next_line;
 	static char *buffer;
@@ -103,7 +100,7 @@ char *get_next_line(int fd)
 	if (!buffer )
 		return (NULL);
 	next_line = filtered(buffer);
-	buffer = rest_of(buffer);
+	buffer = rest_of_line(buffer, '\n');
 	if (!next_line && bytes_read == 0)
 	{
 		free(buffer);

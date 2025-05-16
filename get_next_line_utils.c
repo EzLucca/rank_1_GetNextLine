@@ -34,23 +34,6 @@ void	ft_bzero(void *s, size_t n)
 	}
 }
 
-char	*ft_strchr(const char *s, int c)
-{
-	int	i;
-
-	c = (unsigned char) c;
-	i = 0;
-	while (s[i])
-	{
-		if (s[i] == c)
-			return ((char *) &s[i]);
-		i++;
-	}
-	if (s[i] == c)
-		return ((char *) &s[i]);
-	return (NULL);
-}
-
 void	*ft_memcpy(void *dest, const void *src, size_t n)
 {
 	unsigned char			*tmp_dst;
@@ -78,25 +61,6 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	ft_memcpy(array + s1_len, s2, s2_len);
 	array[s1_len + s2_len] = '\0';
 	return (array);
-}
-
-char	*ft_strdup(const char *s)
-{
-	char	*newstr;
-	int		i;
-
-	i = 0;
-	newstr = malloc(sizeof(char) * (ft_strlen(s) + 1));
-	if (newstr)
-	{
-		while (s[i])
-		{
-			newstr[i] = s[i];
-			i++;
-		}
-		newstr[i] = '\0';
-	}
-	return (newstr);
 }
 
 void	*ft_calloc(size_t nmemb, size_t size)
