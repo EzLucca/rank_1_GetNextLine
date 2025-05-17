@@ -29,82 +29,88 @@ char	*ft_strchr(const char *s, int c)
 	return (NULL);
 }
 
-static char *read_from_file(int fd, char *buffer, int *bytes_read)
+char *read_from_file(int fd, char *buffer)
 {
-	char	*tmp_buffer;
+	char	temp[BUFFER_SIZE + 1];
+	char	*line;
+	int		bytes;
 
-	if (!buffer)
-		buffer = ft_calloc(1, sizeof(char));
-	tmp_buffer = ft_calloc(BUFFER_SIZE + 1, sizeof(char));
-	*bytes_read = 1;
-	while(!ft_strchr(buffer, '\n'))
+	line = NULL;
+	if (buffer[0] != '\0')
+		line = ft_strjoin_and_free(NULL, buffer);
+	else
+		line = ft_strjoin_and_free(NULL, "");
+	if (!line)
+		return (NULL);
+	bytes = 1;
+	while (!ft_strchr(line, '\n') && bytes > 0)
 	{
-		*bytes_read = read(fd, tmp_buffer, BUFFER_SIZE);
-		if (*bytes_read < 0)
-		{
-			free(tmp_buffer);
-			free(buffer);
-			return (NULL);
-		}
-		if (*bytes_read == 0)
+		bytes = read(fd, temp, BUFFER_SIZE);
+		if (bytes <= 0)
 			break;
-		tmp_buffer[*bytes_read] = '\0';
-		buffer = ft_strjoin(buffer, tmp_buffer);
+		temp[bytes] = '\0';
+		line = ft_strjoin_and_free(line, temp);
+		if (!line)
+			return (NULL);
 	}
-	free(tmp_buffer);
-	return (buffer);
+	return (line);
 }
 
-static char	*rest_of_line(const char *s, int c)
+static void	rest_of_line(char *buffer, char *line)
 {
-	int	i;
+	int		i;
+	char	*newline;
 
-	c = (unsigned char) c;
 	i = 0;
-	while (s[i])
+	newline = ft_strchr(line, '\n');
+	if (!newline)
 	{
-		if (s[i] == c)
-			return ((char *) &s[i+1]);
-		i++;
+		buffer[0] = '\0';
+		return ;
 	}
-	if (s[i] == c)
-		return ((char *) &s[i+1]);
-	return (NULL);
+	newline++;
+	while (*newline)
+		buffer[i++] = *newline++;
+	buffer[i] = '\0';
 }
 
-static char *filtered(char *buffer)
+static char *extract_line(char *line)
 {
 	int	i;
 	char *line_to_return;
 
-	if (!buffer || !buffer[i])
+	i = 0;
+	if (!line || !line[0])
 		return (NULL);
-	i = ft_strlen(buffer) - ft_strlen(rest_of_line(buffer, '\n'));
-	line_to_return = ft_calloc(i + 2, sizeof(char));
+	while (line[i] && line[i] != '\n')
+		i++;
+	if (line[i] == '\n')
+		i++;
+	line_to_return = ft_calloc(i + 1, sizeof(char));
 	if (!line_to_return)
 		return (NULL);
-	ft_memcpy(line_to_return, buffer, i);
+	ft_memcpy(line_to_return, line, i);
 	return (line_to_return);
 }
 
-
-char	*get_next_line(int fd)
+char *get_next_line(int fd)
 {
-	char *next_line;
-	static char *buffer;
-	int	bytes_read;
+	static char	buffer[BUFFER_SIZE + 1];
+	char		*line;
+	char		*result;
 
+	line = NULL;
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	buffer = read_from_file(fd, buffer, &bytes_read);
-	if (!buffer )
+	if (buffer[0] == '\0')
+		ft_bzero(buffer, BUFFER_SIZE + 1);
+	line = read_from_file(fd, buffer);
+	if (!line)
 		return (NULL);
-	next_line = filtered(buffer);
-	buffer = rest_of_line(buffer, '\n');
-	if (!next_line && bytes_read == 0)
-	{
-		free(buffer);
-		return (NULL);
-	}
-	return (next_line);
+	result = extract_line(line);
+	if (!result)
+		return (free(line), NULL);
+	rest_of_line(buffer, line);
+	free(line);
+	return (result);
 }

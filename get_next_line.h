@@ -13,7 +13,7 @@
 #ifndef GET_NEXT_LINE
 # define GET_NEXT_LINE
 
-# define BUFFER_SIZE 5
+# define BUFFER_SIZE 10
 
 // ------------------------ Libraries ------------------------ //
 
@@ -37,5 +37,7 @@ void	*ft_memcpy(void *dest, const void *src, size_t n);
 char	*ft_strchr(const char *s, int c);
 
 char	*ft_strdup(const char *s);
+
+char	*ft_strjoin_and_free(char *s1, char *s2);
 
 #endif // !GET_NEXT_LINE

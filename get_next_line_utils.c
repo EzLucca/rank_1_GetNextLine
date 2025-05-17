@@ -14,11 +14,13 @@
 
 size_t	ft_strlen(const char *s)
 {
-	int	p;
+	size_t p;
 
+	if(!s)
+		return(0);
 	p = 0;
-	while (*s++)
-		++p;
+	while (s[p])
+		p++;
 	return (p);
 }
 
@@ -39,6 +41,8 @@ void	*ft_memcpy(void *dest, const void *src, size_t n)
 	unsigned char			*tmp_dst;
 	const unsigned char		*tmp_src;
 
+	if(!dest || !src)
+		return (NULL);
 	tmp_dst = (unsigned char *) dest;
 	tmp_src = (const unsigned char *) src;
 	while (n--)
@@ -46,21 +50,47 @@ void	*ft_memcpy(void *dest, const void *src, size_t n)
 	return (dest);
 }
 
-char	*ft_strjoin(char const *s1, char const *s2)
+char	*ft_strdup(const char *s)
 {
-	int		s1_len;
-	int		s2_len;
-	char	*array;
+	char	*newstr;
+	int		i;
 
-	s1_len = ft_strlen(s1);
-	s2_len = ft_strlen(s2);
-	array = malloc((s1_len + s2_len + 1) * sizeof(char));
-	if (!array)
+	i = 0;
+	newstr = malloc(sizeof(char) * (ft_strlen(s) + 1));
+	if (newstr)
+	{
+		while (s[i])
+		{
+			newstr[i] = s[i];
+			i++;
+		}
+		newstr[i] = '\0';
+	}
+	return (newstr);
+}
+
+char	*ft_strjoin_and_free(char *s1, char *s2)
+{
+	int		len1;
+	int		len2;
+	char	*strjoined;
+
+	if (!s2)
 		return (NULL);
-	ft_memcpy(array, s1, s1_len);
-	ft_memcpy(array + s1_len, s2, s2_len);
-	array[s1_len + s2_len] = '\0';
-	return (array);
+	if (s1)
+		len1 = ft_strlen(s1);
+	else
+		len1 = 0;
+	len2 = ft_strlen(s2);
+	strjoined = malloc((len1 + len2 + 1) * sizeof(char));
+	if (!strjoined)
+		return (free(s1), NULL);
+	if (s1)
+		ft_memcpy(strjoined, s1, len1);
+	ft_memcpy(strjoined + len1, s2, len2);
+	strjoined[len1 + len2] = '\0';
+	free((void *) s1);
+	return (strjoined);
 }
 
 void	*ft_calloc(size_t nmemb, size_t size)
