@@ -50,25 +50,6 @@ void	*ft_memcpy(void *dest, const void *src, size_t n)
 	return (dest);
 }
 
-char	*ft_strdup(const char *s)
-{
-	char	*newstr;
-	int		i;
-
-	i = 0;
-	newstr = malloc(sizeof(char) * (ft_strlen(s) + 1));
-	if (newstr)
-	{
-		while (s[i])
-		{
-			newstr[i] = s[i];
-			i++;
-		}
-		newstr[i] = '\0';
-	}
-	return (newstr);
-}
-
 char	*ft_strjoin_and_free(char *s1, char *s2)
 {
 	int		len1;

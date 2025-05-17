@@ -56,40 +56,28 @@ char *read_from_file(int fd, char *buffer)
 	return (line);
 }
 
-static void	rest_of_line(char *buffer, char *line)
+static char *extract_line(char *buffer, char *line)
 {
-	int		i;
-	char	*newline;
+    int len;
+    char *newline;
+    char *line_to_return;
 
-	i = 0;
 	newline = ft_strchr(line, '\n');
-	if (!newline)
-	{
-		buffer[0] = '\0';
-		return ;
-	}
-	newline++;
-	while (*newline)
-		buffer[i++] = *newline++;
-	buffer[i] = '\0';
-}
-
-static char *extract_line(char *line)
-{
-	int	i;
-	char *line_to_return;
-
-	i = 0;
-	if (!line || !line[0])
-		return (NULL);
-	while (line[i] && line[i] != '\n')
-		i++;
-	if (line[i] == '\n')
-		i++;
-	line_to_return = ft_calloc(i + 1, sizeof(char));
+    if (!line || !line[0])
+        return (NULL);
+    if (!newline)
+    {
+        buffer[0] = '\0';
+        return NULL;
+    }
+    len = newline - line + 1;
+    newline++;
+	ft_memcpy(buffer, newline, ft_strlen(newline));
+    buffer[ft_strlen(newline)] = '\0';
+	line_to_return = ft_calloc(len + 1, sizeof(char));
 	if (!line_to_return)
 		return (NULL);
-	ft_memcpy(line_to_return, line, i);
+	ft_memcpy(line_to_return, line, len);
 	return (line_to_return);
 }
 
@@ -107,10 +95,9 @@ char *get_next_line(int fd)
 	line = read_from_file(fd, buffer);
 	if (!line)
 		return (NULL);
-	result = extract_line(line);
+	result = extract_line(buffer, line);
 	if (!result)
 		return (free(line), NULL);
-	rest_of_line(buffer, line);
 	free(line);
 	return (result);
 }
