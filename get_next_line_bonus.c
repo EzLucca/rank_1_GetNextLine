@@ -6,12 +6,11 @@
 /*   By: edlucca <edlucca@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/18 14:29:04 by edlucca           #+#    #+#             */
-/*   Updated: 2025/05/18 15:10:59 by edlucca          ###   ########.fr       */
+/*   Updated: 2025/05/18 18:34:05 by edlucca          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
-#define MAX_FD 1024
+#include "get_next_line_bonus.h"
 
 char	*ft_strchr(const char *s, int c)
 {
