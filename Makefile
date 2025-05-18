@@ -7,6 +7,8 @@ CFLAGS = -Wall -Wextra -Werror
 
 SRCS = get_next_line.c get_next_line_utils.c 
 
+BONUS_SRCS = get_next_line_bonus.c get_next_line_utils.c
+
 MEMORY = -g -fsanitize=address,undefined
 
 C_OBJECTS = $(SRCS:.c=.o)
@@ -34,6 +36,11 @@ test:
 	@./output
 	@rm -f output
 
+testbonus: 
+	@cc $(BONUS_SRCS) mainbonus.c -o output
+	@./output
+	@rm -f output
+
 # Use with gdb
 gdbtest: 
 	@cc $(SRCS) -g main.c -o output
@@ -44,4 +51,8 @@ memorytest:
 	@./output
 	@rm -f output
 
-.PHONY: all clean fclean re bonus test memorytest
+memorytestbonus: 
+	@cc $(MEMORY) $(BONUS_SRCS) mainbonus.c -o output
+	@./output
+	@rm -f output
+.PHONY: all clean fclean re bonus test testbonus memorytest memorytestbonus

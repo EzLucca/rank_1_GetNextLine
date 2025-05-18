@@ -1,16 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: edlucca <edlucca@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/15 17:07:46 by edlucca           #+#    #+#             */
-/*   Updated: 2025/05/15 21:42:23 by edlucca          ###   ########.fr       */
+/*   Created: 2025/05/18 14:29:04 by edlucca           #+#    #+#             */
+/*   Updated: 2025/05/18 15:10:59 by edlucca          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+#define MAX_FD 1024
 
 char	*ft_strchr(const char *s, int c)
 {
@@ -83,18 +84,19 @@ static char *extract_line(char *buffer, char *line)
 
 char *get_next_line(int fd)
 {
-	static char	buffer[BUFFER_SIZE + 1];
+	static char	buffer[MAX_FD][BUFFER_SIZE + 1];
 	char		*line;
 	char		*result;
 
-	if (fd < 0 || BUFFER_SIZE <= 0)
+	if (fd < 0 || fd >= MAX_FD || BUFFER_SIZE <= 0)
 		return (NULL);
-	line = read_from_file(fd, buffer);
+	line = read_from_file(fd, buffer[fd]);
 	if (!line)
 		return (NULL);
-	result = extract_line(buffer, line);
+	result = extract_line(buffer[fd], line);
 	if (!result)
 		return (free(line), NULL);
 	free(line);
 	return (result);
 }
+

@@ -13,7 +13,7 @@
 #ifndef GET_NEXT_LINE
 # define GET_NEXT_LINE
 
-# define BUFFER_SIZE 10
+# define BUFFER_SIZE 370
 
 // ------------------------ Libraries ------------------------ //
 
