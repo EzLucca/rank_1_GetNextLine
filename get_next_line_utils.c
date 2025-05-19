@@ -6,7 +6,7 @@
 /*   By: edlucca <edlucca@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 12:00:41 by edlucca           #+#    #+#             */
-/*   Updated: 2025/05/15 21:26:36 by edlucca          ###   ########.fr       */
+/*   Updated: 2025/05/19 18:10:38 by edlucca          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ char	*ft_strjoin_and_free(char *s1, char *s2)
 		ft_memcpy(strjoined, s1, len1);
 	ft_memcpy(strjoined + len1, s2, len2);
 	strjoined[len1 + len2] = '\0';
-	free((void *) s1);
+	free(s1);
 	return (strjoined);
 }
 

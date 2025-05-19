@@ -6,7 +6,7 @@
 /*   By: edlucca <edlucca@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 10:26:12 by edlucca           #+#    #+#             */
-/*   Updated: 2025/05/18 15:46:20 by edlucca          ###   ########.fr       */
+/*   Updated: 2025/05/19 13:53:34 by edlucca          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	main(void)
 	int		count;
 
 	count = 0;
-	fd = open("lord.txt", O_RDONLY);
+	fd = open("example.txt", O_RDONLY);
 	if (fd == -1)
 		return (1);
 	while (1)

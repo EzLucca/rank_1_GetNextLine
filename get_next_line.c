@@ -6,7 +6,7 @@
 /*   By: edlucca <edlucca@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 17:07:46 by edlucca           #+#    #+#             */
-/*   Updated: 2025/05/15 21:42:23 by edlucca          ###   ########.fr       */
+/*   Updated: 2025/05/19 17:57:50 by edlucca          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,13 +29,12 @@ char	*ft_strchr(const char *s, int c)
 	return (NULL);
 }
 
-char	*read_from_file(int fd, char *buffer)
+static char	*read_from_file(int fd, char *buffer)
 {
 	char	temp[BUFFER_SIZE + 1];
 	char	*line;
 	int		bytes;
 
-	line = NULL;
 	if (buffer[0] != '\0')
 		line = ft_strjoin_and_free(NULL, buffer);
 	else
@@ -43,11 +42,11 @@ char	*read_from_file(int fd, char *buffer)
 	if (!line)
 		return (NULL);
 	bytes = 1;
-	while (!ft_strchr(line, '\n') && bytes > 0)
+	while (!ft_strchr(line, '\n') || buffer == NULL)
 	{
 		bytes = read(fd, temp, BUFFER_SIZE);
-		if (bytes < 0)
-			return (free(line), NULL);
+		if (bytes <= 0)
+			break ;
 		temp[bytes] = '\0';
 		line = ft_strjoin_and_free(line, temp);
 		if (!line)
@@ -68,7 +67,8 @@ static char	*extract_line(char *buffer, char *line)
 	if (!newline)
 	{
 		buffer[0] = '\0';
-		return (NULL);
+		// free(buffer);
+		return (line);
 	}
 	len = newline - line + 1;
 	newline++;
@@ -95,6 +95,6 @@ char	*get_next_line(int fd)
 	result = extract_line(buffer, line);
 	if (!result)
 		return (free(line), NULL);
-	free(line);
+	// free(line);
 	return (result);
 }

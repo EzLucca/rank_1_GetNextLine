@@ -6,14 +6,16 @@
 /*   By: edlucca <edlucca@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 12:01:03 by edlucca           #+#    #+#             */
-/*   Updated: 2025/05/14 17:32:24 by edlucca          ###   ########.fr       */
+/*   Updated: 2025/05/19 13:50:10 by edlucca          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
 
-# define BUFFER_SIZE 42 
+#ifndef BUFFER_SIZE
+ # define BUFFER_SIZE 42 
+#endif
 
 // ------------------------ Libraries ------------------------ //
 
