@@ -29,7 +29,7 @@ char	*ft_strchr(const char *s, int c)
 	return (NULL);
 }
 
-char *read_from_file(int fd, char *buffer)
+char	*read_from_file(int fd, char *buffer)
 {
 	char	temp[BUFFER_SIZE + 1];
 	char	*line;
@@ -56,11 +56,11 @@ char *read_from_file(int fd, char *buffer)
 	return (line);
 }
 
-static char *extract_line(char *buffer, char *line)
+static char	*extract_line(char *buffer, char *line)
 {
-	int len;
-	char *newline;
-	char *line_to_return;
+	int		len;
+	char	*newline;
+	char	*line_to_return;
 
 	if (!line || !line[0])
 		return (NULL);
@@ -68,7 +68,7 @@ static char *extract_line(char *buffer, char *line)
 	if (!newline)
 	{
 		buffer[0] = '\0';
-		return NULL;
+		return (NULL);
 	}
 	len = newline - line + 1;
 	newline++;
@@ -81,7 +81,7 @@ static char *extract_line(char *buffer, char *line)
 	return (line_to_return);
 }
 
-char *get_next_line(int fd)
+char	*get_next_line(int fd)
 {
 	static char	buffer[MAX_FD][BUFFER_SIZE + 1];
 	char		*line;
@@ -98,4 +98,3 @@ char *get_next_line(int fd)
 	free(line);
 	return (result);
 }
-

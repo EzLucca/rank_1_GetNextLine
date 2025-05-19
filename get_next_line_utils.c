@@ -14,10 +14,10 @@
 
 size_t	ft_strlen(const char *s)
 {
-	size_t p;
+	size_t	p;
 
-	if(!s)
-		return(0);
+	if (!s)
+		return (0);
 	p = 0;
 	while (s[p])
 		p++;
@@ -41,7 +41,7 @@ void	*ft_memcpy(void *dest, const void *src, size_t n)
 	unsigned char			*tmp_dst;
 	const unsigned char		*tmp_src;
 
-	if(!dest || !src)
+	if (!dest || !src)
 		return (NULL);
 	tmp_dst = (unsigned char *) dest;
 	tmp_src = (const unsigned char *) src;

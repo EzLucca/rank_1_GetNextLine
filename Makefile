@@ -45,6 +45,9 @@ testbonus:
 gdbtest: 
 	@cc $(SRCS) -g main.c -o output
 
+gdbtestbonus: 
+	@cc $(BONUS_SRCS) -g mainbonus.c -o output
+
 # Used for memory testing
 memorytest: 
 	@cc $(MEMORY) $(SRCS) main.c -o output
@@ -55,4 +58,4 @@ memorytestbonus:
 	@cc $(MEMORY) $(BONUS_SRCS) mainbonus.c -o output
 	@./output
 	@rm -f output
-.PHONY: all clean fclean re bonus test testbonus memorytest memorytestbonus
+.PHONY: all clean fclean re bonus test testbonus gdbtest gdbtestbonus memorytest memorytestbonus

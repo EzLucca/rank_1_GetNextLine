@@ -14,33 +14,31 @@
 #include <fcntl.h>
 #include "get_next_line.h"
 
-int main(void)
+int	main(void)
 {
-	int    fd1;
-	int    fd2;
-	char  *next_line1;
-	char  *next_line2;
-	int  count;
+	int		fd1;
+	int		fd2;
+	char	*next_line1;
+	char	*next_line2;
+	int		count;
 
 	count = 0;
 	fd1 = open("lord.txt", O_RDONLY);
 	fd2 = open("rings.txt", O_RDONLY);
 	if (fd1 < 0 || fd2 < 0)
 		return (1);
-	while(1)
+	while (1)
 	{
 		next_line1 = get_next_line(fd1);
 		next_line2 = get_next_line(fd2);
 		if (!next_line1 || !next_line2)
 			break ;
 		count++;
-		printf("fd1 - %d -> %s", count, next_line1); //count is to show you the line numbers
-		printf("fd2 - %d -> %s", count, next_line2); //count is to show you the line numbers
+		printf("fd1 - %d -> %s", count, next_line1);
+		printf("fd2 - %d -> %s", count, next_line2);
 		free (next_line1);
 		free (next_line2);
-		// next_line = NULL;
 	}
-
 	close(fd1);
 	close(fd2);
 	return (0);
