@@ -38,4 +38,8 @@ char	*ft_strchr(const char *s, int c);
 
 char	*ft_strjoin_and_free(char *s1, char *s2);
 
+char	*ft_strchr(const char *s, int c);
+char	*ft_strjoin(char *s1, char *s2);
+char	*ft_substr(char *s, unsigned int start, size_t len);
+char	*ft_strdup(const char *s);
 #endif

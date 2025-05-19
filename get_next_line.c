@@ -12,89 +12,80 @@
 
 #include "get_next_line.h"
 
-char	*ft_strchr(const char *s, int c)
+static char	*read_to_stash(int fd, char *stash)
 {
-	int	i;
+	char	*buffer;
+	ssize_t	bytes_read;
 
-	c = (unsigned char) c;
-	i = 0;
-	while (s[i])
+	buffer = malloc((BUFFER_SIZE + 1) * sizeof(char));
+	if (!buffer)
+		return (NULL);
+	bytes_read = 1;
+	while (!ft_strchr(stash, '\n') && bytes_read > 0)
 	{
-		if (s[i] == c)
-			return ((char *) &s[i]);
-		i++;
+		bytes_read = read(fd, buffer, BUFFER_SIZE);
+		if (bytes_read < 0)
+		{
+			free(buffer);
+			free(stash);
+			return (NULL);
+		}
+		buffer[bytes_read] = '\0';
+		stash = ft_strjoin(stash, buffer);
+		if (!stash)
+		{
+			free(buffer);
+			return (NULL);
+		}
 	}
-	if (s[i] == c)
-		return ((char *) &s[i]);
-	return (NULL);
+	free(buffer);
+	return (stash);
 }
 
-static char	*read_from_file(int fd, char *buffer)
+static char	*extract_line(char *stash)
 {
-	char	temp[BUFFER_SIZE + 1];
 	char	*line;
-	int		bytes;
+	size_t	i;
 
-	if (buffer[0] != '\0')
-		line = ft_strjoin_and_free(NULL, buffer);
-	else
-		line = ft_strjoin_and_free(NULL, "");
-	if (!line)
+	if (!stash || stash[0] == '\0')
 		return (NULL);
-	bytes = 1;
-	while (!ft_strchr(line, '\n') || buffer == NULL)
-	{
-		bytes = read(fd, temp, BUFFER_SIZE);
-		if (bytes <= 0)
-			break ;
-		temp[bytes] = '\0';
-		line = ft_strjoin_and_free(line, temp);
-		if (!line)
-			return (NULL);
-	}
+	i = 0;
+	while (stash[i] && stash[i] != '\n')
+		i++;
+	line = ft_substr(stash, 0, stash[i] == '\n' ? i + 1 : i);
 	return (line);
 }
 
-static char	*extract_line(char *buffer, char *line)
+static char	*clean_stash(char *stash)
 {
-	int		len;
-	char	*newline;
-	char	*line_to_return;
+	char	*new_stash;
+	char	*newline_ptr;
+	size_t	new_len;
 
-	if (!line || !line[0])
-		return (NULL);
-	newline = ft_strchr(line, '\n');
-	if (!newline)
+	newline_ptr = ft_strchr(stash, '\n');
+	if (!newline_ptr)
 	{
-		buffer[0] = '\0';
-		// free(buffer);
-		return (line);
-	}
-	len = newline - line + 1;
-	newline++;
-	ft_memcpy(buffer, newline, ft_strlen(newline));
-	buffer[ft_strlen(newline)] = '\0';
-	line_to_return = ft_calloc(len + 1, sizeof(char));
-	if (!line_to_return)
+		free(stash);
 		return (NULL);
-	ft_memcpy(line_to_return, line, len);
-	return (line_to_return);
+	}
+	new_len = ft_strlen(newline_ptr + 1);
+	new_stash = ft_substr(newline_ptr + 1, 0, new_len);
+	free(stash);
+	return (new_stash);
 }
 
 char	*get_next_line(int fd)
 {
-	static char	buffer[BUFFER_SIZE + 1];
+	static char	*stash;
 	char		*line;
-	char		*result;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	line = read_from_file(fd, buffer);
-	if (!line)
+	stash = ft_strdup("");
+	stash = read_to_stash(fd, stash);
+	if (!stash)
 		return (NULL);
-	result = extract_line(buffer, line);
-	if (!result)
-		return (free(line), NULL);
-	// free(line);
-	return (result);
+	line = extract_line(stash);
+	stash = clean_stash(stash);
+	return (line);
 }

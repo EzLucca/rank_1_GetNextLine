@@ -24,16 +24,21 @@ size_t	ft_strlen(const char *s)
 	return (p);
 }
 
-void	ft_bzero(void *s, size_t n)
+char	*ft_strchr(const char *s, int c)
 {
-	char	*temp_ptr;
+	int	i;
 
-	temp_ptr = (char *) s;
-	while (n > 0)
+	c = (unsigned char) c;
+	i = 0;
+	while (s[i])
 	{
-		*(temp_ptr++) = 0;
-		n--;
+		if (s[i] == c)
+			return ((char *) &s[i]);
+		i++;
 	}
+	if (s[i] == c)
+		return ((char *) &s[i]);
+	return (NULL);
 }
 
 void	*ft_memcpy(void *dest, const void *src, size_t n)
@@ -50,41 +55,61 @@ void	*ft_memcpy(void *dest, const void *src, size_t n)
 	return (dest);
 }
 
-char	*ft_strjoin_and_free(char *s1, char *s2)
+char	*ft_strdup(const char *s)
 {
-	int		len1;
-	int		len2;
-	char	*strjoined;
+	char	*newstr;
+	int		i;
 
-	if (!s2)
-		return (NULL);
-	if (s1)
-		len1 = ft_strlen(s1);
-	else
-		len1 = 0;
-	len2 = ft_strlen(s2);
-	strjoined = malloc((len1 + len2 + 1) * sizeof(char));
-	if (!strjoined)
-		return (free(s1), NULL);
-	if (s1)
-		ft_memcpy(strjoined, s1, len1);
-	ft_memcpy(strjoined + len1, s2, len2);
-	strjoined[len1 + len2] = '\0';
-	free(s1);
-	return (strjoined);
+	i = 0;
+	newstr = malloc(sizeof(char) * (ft_strlen(s) + 1));
+	if (newstr)
+	{
+		while (s[i])
+		{
+			newstr[i] = s[i];
+			i++;
+		}
+		newstr[i] = '\0';
+	}
+	return (newstr);
 }
 
-void	*ft_calloc(size_t nmemb, size_t size)
+char	*ft_substr(char *s, unsigned int start, size_t len)
 {
-	void	*tmp;
-	size_t	nb_bytes;
+	char	*string;
 
-	nb_bytes = nmemb * size;
-	if (size && (nb_bytes / size) != nmemb)
+	if (!s)
 		return (NULL);
-	tmp = malloc(nb_bytes);
-	if (!tmp)
+	if (start > ft_strlen(s))
+		return (ft_strdup(""));
+	if (len > ft_strlen(s + start))
+		len = ft_strlen(s + start);
+	string = malloc(len + 1 * sizeof(char));
+	if (!string)
 		return (NULL);
-	ft_bzero(tmp, nb_bytes);
-	return (tmp);
+	ft_memcpy(string, s + start, len);
+	string[len] = '\0';
+	return (string);
+}
+
+char	*ft_strjoin(char *s1, char *s2)
+{
+	char	*joined;
+	size_t	len1;
+	size_t	len2;
+
+	if (!s1)
+		s1 = ft_strdup("");
+	if (!s2)
+		return (NULL);
+	len1 = ft_strlen(s1);
+	len2 = ft_strlen(s2);
+	joined = malloc(sizeof(char) * (len1 + len2 + 1));
+	if (!joined)
+		return (free(s1),NULL);
+	ft_memcpy(joined, s1, len1);
+	ft_memcpy(joined + len1, s2, len2);
+	joined[len1 + len2] = '\0';
+	free(s1);
+	return (joined);
 }
