@@ -12,7 +12,7 @@
 
 #include "get_next_line.h"
 
-static char	*read_to_stash(int fd, char *buffer)
+static char	*read_from_file(int fd, char *buffer)
 {
 	char	*tmp_buf;
 	ssize_t	bytes_read;
@@ -30,10 +30,12 @@ static char	*read_to_stash(int fd, char *buffer)
 			free(buffer);
 			return (NULL);
 		}
+		if (bytes_read == 0)
+			break ;
 		tmp_buf[bytes_read] = '\0';
 		buffer = ft_strjoin(buffer, tmp_buf);
 		if (!buffer)
-			return (free(tmp_buf), NULL);
+			return (free(tmp_buf), tmp_buf = NULL, NULL);
 	}
 	free(tmp_buf);
 	return (buffer);
@@ -66,9 +68,10 @@ static char	*update_buffer(char *buffer)
 	if (!newline_ptr)
 	{
 		free(buffer);
+		buffer = NULL;
 		return (NULL);
 	}
-	rest_len = ft_strlen(newline_ptr + 1);
+	rest_len = ft_strlen(newline_ptr);
 	rest_of_line = ft_substr(newline_ptr + 1, 0, rest_len);
 	free(buffer);
 	return (rest_of_line);
@@ -81,13 +84,16 @@ char	*get_next_line(int fd)
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	buffer = malloc(1);
-	ft_memcpy(buffer, "", 1);
-	buffer[0] = '\0';
-	buffer = read_to_stash(fd, buffer);
+	// buffer = malloc(1);
+	// ft_memcpy(buffer, "", 1);
+	// buffer[0] = '\0';
+	buffer = ft_strdup("");
+	buffer = read_from_file(fd, buffer);
 	if (!buffer)
 		return (NULL);
 	line = extract_line(buffer);
 	buffer = update_buffer(buffer);
+	if(line == NULL)
+		return (free(buffer), buffer = NULL, NULL);
 	return (line);
 }
