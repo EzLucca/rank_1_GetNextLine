@@ -81,23 +81,23 @@ char	*ft_substr(char *s, unsigned int start, size_t len)
 	return (string);
 }
 
-char	*ft_strjoin(char *s1, char *s2)
+char	*ft_strjoin(char *buffer, char *tmp_buf)
 {
 	int		s1_len;
 	int		s2_len;
-	char	*array;
+	char	*string;
 
 	s1_len = 0;
 	s2_len = 0;
-	while (s1[s1_len])
+	while (buffer[s1_len])
 		s1_len++;
-	while (s2[s2_len])
+	while (tmp_buf[s2_len])
 		s2_len++;
-	array = malloc((s1_len + s2_len + 1) * sizeof(char));
-	if (!array)
+	string = malloc((s1_len + s2_len + 1) * sizeof(char));
+	if (!string)
 		return (NULL);
-	ft_memcpy(array, s1, s1_len);
-	ft_memcpy(array + s1_len, s2, s2_len);
-	array[s1_len + s2_len] = '\0';
-	return (array);
+	ft_memcpy(string, buffer, s1_len);
+	ft_memcpy(string + s1_len, tmp_buf, s2_len);
+	string[s1_len + s2_len] = '\0';
+	return (string);
 }
