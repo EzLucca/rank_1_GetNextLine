@@ -13,8 +13,13 @@
 #ifndef GET_NEXT_LINE_BONUS_H
 # define GET_NEXT_LINE_BONUS_H
 
-// # define BUFFER_SIZE 42 
-# define MAX_FD 1024
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 42 
+# endif
+
+# ifndef MAX_FD
+#  define MAX_FD 1024
+# endif
 
 // ------------------------ Libraries ------------------------ //
 
