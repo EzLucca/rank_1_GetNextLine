@@ -28,6 +28,8 @@ char	*ft_strchr(const char *s, int c)
 {
 	int	i;
 
+	if (!s)
+		return (NULL);
 	c = (unsigned char) c;
 	i = 0;
 	while (s[i])
@@ -73,57 +75,57 @@ char	*ft_strdup(char *s)
 	return (newstr);
 }
 
-// char	*ft_substr(char *s, unsigned int start, size_t len)
-// {
-// 	char	*string;
-// 	size_t	s_len;
-//
-// 	if (!s)
-// 		return (NULL);
-// 	s_len = ft_strlen(s);
-// 	if (start >= s_len)
-// 	{
-// 		// string = malloc(1);
-// 		// if (!string)
-// 		// 	return (NULL);
-// 		// string[0] = '\0';
-// 		// return (string);
-// 		return (ft_strdup(""));
-// 	}
-// 	if (len > s_len + start)
-// 		len = s_len + start;
-// 	string = malloc(len + 1);
-// 	if (!string)
-// 		return (NULL);
-// 	ft_memcpy(string, s + start, len);
-// 	string[len] = '\0';
-// 	return (string);
-// }
 char	*ft_substr(char *s, unsigned int start, size_t len)
 {
-	char	*sub;
-	size_t	n;
-	size_t	max;
+	char	*string;
+	size_t	s_len;
 
 	if (!s)
 		return (NULL);
-	max = ft_strlen((char *)s);
-	if (start >= max)
-		len = 0;
-	if (start + len > max)
-		len = max - start;
-	sub = malloc(sizeof(char) * (len + 1));
-	if (!(sub))
-		return (NULL);
-	n = 0;
-	while (s[start + n] && n < len)
+	s_len = ft_strlen(s);
+	if (start >= s_len)
 	{
-		sub[n] = s[start + n];
-		n++;
+		string = malloc(1);
+		if (!string)
+			return (NULL);
+		string[0] = '\0';
+		return (string);
+		// return (ft_strdup(""));
 	}
-	sub[n] = '\0';
-	return (sub);
+	if (len > s_len - start)
+		len = s_len - start;
+	string = malloc(len + 1);
+	if (!string)
+		return (NULL);
+	ft_memcpy(string, s + start, len);
+	string[len] = '\0';
+	return (string);
 }
+// char	*ft_substr(char *s, unsigned int start, size_t len)
+// {
+// 	char	*sub;
+// 	size_t	n;
+// 	size_t	max;
+//
+// 	if (!s)
+// 		return (NULL);
+// 	max = ft_strlen((char *)s);
+// 	if (start >= max)
+// 		len = 0;
+// 	if (start + len > max)
+// 		len = max - start;
+// 	sub = malloc(sizeof(char) * (len + 1));
+// 	if (!(sub))
+// 		return (NULL);
+// 	n = 0;
+// 	while (s[start + n] && n < len)
+// 	{
+// 		sub[n] = s[start + n];
+// 		n++;
+// 	}
+// 	sub[n] = '\0';
+// 	return (sub);
+// }
 
 char	*ft_strjoin(char *str1, char *str2)
 {

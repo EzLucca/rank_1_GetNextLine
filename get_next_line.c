@@ -14,30 +14,34 @@
 
 static char	*read_from_file(int fd, char *buffer)
 {
-	char	*tmp_buf;
+	char	tmp_buf[BUFFER_SIZE + 1];
+	char	*new_joined_buffer;
 	ssize_t	bytes_read;
 
-	tmp_buf = malloc((BUFFER_SIZE + 1) * sizeof(char));
-	if (!tmp_buf)
-		return (NULL);
+	// tmp_buf = malloc((BUFFER_SIZE + 1) * sizeof(char));
+	// if (!tmp_buf)
+	// 	return (NULL);
 	bytes_read = 1;
 	while (!ft_strchr(buffer, '\n') && bytes_read > 0)
 	{
 		bytes_read = read(fd, tmp_buf, BUFFER_SIZE);
 		if (bytes_read < 0)
 		{
-			free(tmp_buf);
+			// free(tmp_buf);
 			free(buffer);
 			return (NULL);
 		}
 		if (bytes_read == 0)
 			break ;
 		tmp_buf[bytes_read] = '\0';
-		buffer = ft_strjoin(buffer, tmp_buf);
+		new_joined_buffer = ft_strjoin(buffer, tmp_buf);
+		free(buffer);
+		buffer = new_joined_buffer;
 		if (!buffer)
-			return (free(tmp_buf), tmp_buf = NULL, NULL);
+			// return (free(tmp_buf), tmp_buf = NULL, NULL);
+			return (NULL);
 	}
-	free(tmp_buf);
+	// free(tmp_buf);
 	return (buffer);
 }
 
@@ -71,15 +75,17 @@ static char	*update_buffer(char *buffer)
 		buffer = NULL;
 		return (NULL);
 	}
+	newline_ptr++;
 	rest_len = ft_strlen(newline_ptr);
-	rest_of_line = ft_substr(newline_ptr + 1, 0, rest_len);
+	// rest_of_line = ft_substr(newline_ptr, 0, rest_len);
 	free(buffer);
-	return (rest_of_line);
+	// return (rest_of_line);
+	return (newline_ptr);
 }
 
 char	*get_next_line(int fd)
 {
-	static char	*buffer;
+	static char	*buffer = NULL;
 	char		*line;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
@@ -87,13 +93,18 @@ char	*get_next_line(int fd)
 	// buffer = malloc(1);
 	// ft_memcpy(buffer, "", 1);
 	// buffer[0] = '\0';
-	buffer = ft_strdup("");
+	if (!buffer)
+	{
+		buffer = ft_strdup("");
+		if (!buffer)
+			return (NULL);
+	}
 	buffer = read_from_file(fd, buffer);
 	if (!buffer)
 		return (NULL);
 	line = extract_line(buffer);
 	buffer = update_buffer(buffer);
 	if(line == NULL)
-		return (free(buffer), buffer = NULL, NULL);
+		return (NULL);
 	return (line);
 }
