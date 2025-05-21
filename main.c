@@ -21,7 +21,7 @@ int	main(void)
 	int		count;
 
 	count = 0;
-	fd = open("example.txt", O_RDONLY);
+	fd = open("lord.txt", O_RDONLY);
 	if (fd == -1)
 		return (1);
 	while (1)

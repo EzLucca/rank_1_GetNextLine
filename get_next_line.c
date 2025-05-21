@@ -12,24 +12,6 @@
 
 #include "get_next_line.h"
 
-// static char *my_free(int count, ...)
-// {
-// 	va_list	args;
-// 	void	*ptr;
-// 	int		i;
-//
-// 	i = 0;
-// 	va_start(args, count);
-// 	while (i < count)
-// 	{
-// 		ptr = va_arg(args, void *);
-// 		free(ptr);
-// 		i++;
-// 	}
-// 	va_end(args);
-// 	return (NULL);
-// }
-
 static char	*read_from_file(int fd, char *buffer)
 {
 	char	*tmp_buf;
@@ -38,28 +20,23 @@ static char	*read_from_file(int fd, char *buffer)
 
 	tmp_buf = malloc((BUFFER_SIZE + 1) * sizeof(char));
 	if (!tmp_buf)
-		// return(my_free(1, tmp_buf));
-		return(free(tmp_buf), NULL);
+		return (free(tmp_buf), NULL);
 	bytes_read = 1;
 	while (!ft_strchr(buffer, '\n') && bytes_read > 0)
 	{
 		bytes_read = read(fd, tmp_buf, BUFFER_SIZE);
 		if (bytes_read < 0)
-			// return(my_free(2, tmp_buf, buffer));
-			return(free(tmp_buf), free(buffer), NULL);
+			return (free(tmp_buf), free(buffer), NULL);
 		if (bytes_read == 0)
 			break ;
 		tmp_buf[bytes_read] = '\0';
 		new_joined_buffer = ft_strjoin(buffer, tmp_buf);
-		// my_free(1, buffer);
-		free(buffer);
+		free (buffer);
 		buffer = new_joined_buffer;
 		if (!buffer)
-			// return(my_free(1, tmp_buf));
-			return(free(tmp_buf), NULL);
+			return (free(tmp_buf), NULL);
 	}
-	// my_free(1, tmp_buf);
-	free(tmp_buf);
+	free (tmp_buf);
 	return (buffer);
 }
 
@@ -88,14 +65,11 @@ static char	*update_buffer(char *buffer)
 
 	newline_ptr = ft_strchr(buffer, '\n');
 	if (!newline_ptr)
-		// return (my_free(1, buffer));
 		return (free(buffer), NULL);
 	rest_len = ft_strlen(newline_ptr + 1);
 	rest_of_line = ft_substr(newline_ptr + 1, 0, rest_len);
 	if (!rest_of_line)
-		// return (my_free(1, buffer));
 		return (free(buffer), NULL);
-	// my_free(1, buffer);
 	free(buffer);
 	return (rest_of_line);
 }
@@ -119,7 +93,7 @@ char	*get_next_line(int fd)
 		return (NULL);
 	line = extract_line(buffer);
 	buffer = update_buffer(buffer);
-	if(line == NULL)
+	if (line == NULL)
 		return (NULL);
 	return (line);
 }
