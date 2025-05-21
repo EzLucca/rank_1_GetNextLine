@@ -87,8 +87,12 @@ char	*ft_strjoin(char *s1, char *s2)
 	int		s2_len;
 	char	*array;
 
-	s1_len = ft_strlen(s1);
-	s2_len = ft_strlen(s2);
+	s1_len = 0;
+	s2_len = 0;
+	while (s1[s1_len])
+		s1_len++;
+	while (s2[s2_len])
+		s2_len++;
 	array = malloc((s1_len + s2_len + 1) * sizeof(char));
 	if (!array)
 		return (NULL);

@@ -24,16 +24,23 @@ size_t	ft_strlen(const char *s)
 	return (p);
 }
 
-void	ft_bzero(void *s, size_t n)
+char	*ft_strchr(const char *s, int c)
 {
-	char	*temp_ptr;
+	int	i;
 
-	temp_ptr = (char *) s;
-	while (n > 0)
+	if (!s)
+		return (NULL);
+	c = (unsigned char) c;
+	i = 0;
+	while (s[i])
 	{
-		*(temp_ptr++) = 0;
-		n--;
+		if (s[i] == c)
+			return ((char *) &s[i]);
+		i++;
 	}
+	if (s[i] == c)
+		return ((char *) &s[i]);
+	return (NULL);
 }
 
 void	*ft_memcpy(void *dest, const void *src, size_t n)
@@ -50,41 +57,47 @@ void	*ft_memcpy(void *dest, const void *src, size_t n)
 	return (dest);
 }
 
-char	*ft_strjoin_and_free(char *s1, char *s2)
+char	*ft_substr(char *s, unsigned int start, size_t len)
 {
-	int		len1;
-	int		len2;
-	char	*strjoined;
+	char	*string;
 
-	if (!s2)
+	if (!s)
 		return (NULL);
-	if (s1)
-		len1 = ft_strlen(s1);
-	else
-		len1 = 0;
-	len2 = ft_strlen(s2);
-	strjoined = malloc((len1 + len2 + 1) * sizeof(char));
-	if (!strjoined)
-		return (free(s1), NULL);
-	if (s1)
-		ft_memcpy(strjoined, s1, len1);
-	ft_memcpy(strjoined + len1, s2, len2);
-	strjoined[len1 + len2] = '\0';
-	free((void *) s1);
-	return (strjoined);
+	if (start > ft_strlen(s))
+	{
+		string = malloc(1);
+		if (!string)
+			return (NULL);
+		string[0] = '\0';
+		return (string);
+	}
+	if (len > ft_strlen(s + start))
+		len = ft_strlen(s + start);
+	string = malloc(len + 1);
+	if (!string)
+		return (NULL);
+	ft_memcpy(string, s + start, len);
+	string[len] = '\0';
+	return (string);
 }
 
-void	*ft_calloc(size_t nmemb, size_t size)
+char	*ft_strjoin(char *s1, char *s2)
 {
-	void	*tmp;
-	size_t	nb_bytes;
+	int		s1_len;
+	int		s2_len;
+	char	*array;
 
-	nb_bytes = nmemb * size;
-	if (size && (nb_bytes / size) != nmemb)
+	s1_len = 0;
+	s2_len = 0;
+	while (s1[s1_len])
+		s1_len++;
+	while (s2[s2_len])
+		s2_len++;
+	array = malloc((s1_len + s2_len + 1) * sizeof(char));
+	if (!array)
 		return (NULL);
-	tmp = malloc(nb_bytes);
-	if (!tmp)
-		return (NULL);
-	ft_bzero(tmp, nb_bytes);
-	return (tmp);
+	ft_memcpy(array, s1, s1_len);
+	ft_memcpy(array + s1_len, s2, s2_len);
+	array[s1_len + s2_len] = '\0';
+	return (array);
 }

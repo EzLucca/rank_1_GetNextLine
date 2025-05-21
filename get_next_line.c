@@ -12,32 +12,46 @@
 
 #include "get_next_line.h"
 
+static char *read_and_append(int fd, char *buffer, char *tmp_buf, ssize_t bytes)
+{
+	char	*new_buffer;
+
+	while (!ft_strchr(buffer, '\n') && bytes > 0)
+	{
+		bytes = read(fd, tmp_buf, BUFFER_SIZE);
+		if (bytes < 0)
+		{
+			free(buffer);
+			return (NULL);
+		}
+		if (bytes == 0)
+			break ;
+		tmp_buf[bytes] = '\0';
+		new_buffer = ft_strjoin(buffer, tmp_buf);
+		if (!new_buffer)
+		{
+			free(buffer); 
+			return (NULL);
+		}
+		free (buffer);
+		buffer = new_buffer;
+	}
+	return (buffer);
+}
+
 static char	*read_from_file(int fd, char *buffer)
 {
 	char	*tmp_buf;
-	char	*new_joined_buffer;
-	ssize_t	bytes_read;
+	char	*result;
+	ssize_t	bytes;
 
 	tmp_buf = malloc((BUFFER_SIZE + 1) * sizeof(char));
 	if (!tmp_buf)
-		return (free(tmp_buf), NULL);
-	bytes_read = 1;
-	while (!ft_strchr(buffer, '\n') && bytes_read > 0)
-	{
-		bytes_read = read(fd, tmp_buf, BUFFER_SIZE);
-		if (bytes_read < 0)
-			return (free(tmp_buf), free(buffer), NULL);
-		if (bytes_read == 0)
-			break ;
-		tmp_buf[bytes_read] = '\0';
-		new_joined_buffer = ft_strjoin(buffer, tmp_buf);
-		free (buffer);
-		buffer = new_joined_buffer;
-		if (!buffer)
-			return (free(tmp_buf), NULL);
-	}
+		return (NULL);
+	bytes = 1;
+	result = read_and_append(fd, buffer, tmp_buf, bytes);
 	free (tmp_buf);
-	return (buffer);
+	return (result);
 }
 
 static char	*extract_line(char *buffer)
@@ -65,11 +79,17 @@ static char	*update_buffer(char *buffer)
 
 	newline_ptr = ft_strchr(buffer, '\n');
 	if (!newline_ptr)
-		return (free(buffer), NULL);
+	{
+		free(buffer);
+		return (NULL);
+	}
 	rest_len = ft_strlen(newline_ptr + 1);
 	rest_of_line = ft_substr(newline_ptr + 1, 0, rest_len);
 	if (!rest_of_line)
-		return (free(buffer), NULL);
+	{
+		free(buffer);
+		return (NULL);
+	}
 	free(buffer);
 	return (rest_of_line);
 }
@@ -93,7 +113,5 @@ char	*get_next_line(int fd)
 		return (NULL);
 	line = extract_line(buffer);
 	buffer = update_buffer(buffer);
-	if (line == NULL)
-		return (NULL);
 	return (line);
 }
