@@ -57,24 +57,6 @@ void	*ft_memcpy(void *dest, const void *src, size_t n)
 	return (dest);
 }
 
-char	*ft_strdup(char *s)
-{
-	char	*newstr;
-	int		i;
-
-	i = 0;
-	newstr = malloc(sizeof(char) * (ft_strlen(s) + 1));
-	if (!newstr)
-		return (NULL);
-	while (s[i])
-	{
-		newstr[i] = s[i];
-		i++;
-	}
-	newstr[i] = '\0';
-	return (newstr);
-}
-
 char	*ft_substr(char *s, unsigned int start, size_t len)
 {
 	char	*string;
@@ -101,31 +83,6 @@ char	*ft_substr(char *s, unsigned int start, size_t len)
 	string[len] = '\0';
 	return (string);
 }
-// char	*ft_substr(char *s, unsigned int start, size_t len)
-// {
-// 	char	*sub;
-// 	size_t	n;
-// 	size_t	max;
-//
-// 	if (!s)
-// 		return (NULL);
-// 	max = ft_strlen((char *)s);
-// 	if (start >= max)
-// 		len = 0;
-// 	if (start + len > max)
-// 		len = max - start;
-// 	sub = malloc(sizeof(char) * (len + 1));
-// 	if (!(sub))
-// 		return (NULL);
-// 	n = 0;
-// 	while (s[start + n] && n < len)
-// 	{
-// 		sub[n] = s[start + n];
-// 		n++;
-// 	}
-// 	sub[n] = '\0';
-// 	return (sub);
-// }
 
 char	*ft_strjoin(char *str1, char *str2)
 {
@@ -154,32 +111,3 @@ char	*ft_strjoin(char *str1, char *str2)
 	join[l1 + l2] = '\0';
 	return (join);
 }
-// char	*ft_strjoin(char *s1, char *s2)
-// {
-// 	char	*joined;
-// 	size_t	len1;
-// 	size_t	len2;
-//
-// 	if (!s1)
-// 	{
-// 		// s1 = malloc(1);
-// 		// if (!s1)
-// 		// 	return (NULL);
-// 		// s1[0] = '\0';
-// 		s1 = ft_strdup("");
-// 	}
-// 	if (!s2)
-// 		return (NULL);
-// 	len1 = ft_strlen(s1);
-// 	len2 = ft_strlen(s2);
-// 	joined = malloc(sizeof(char) * (len1 + len2 + 1));
-// 	if (!joined)
-// 		return (free(s1), NULL);
-//
-// 	ft_memcpy(joined, s1, len1);
-// 	ft_memcpy(joined + len1, s2, len2);
-// 	joined[len1 + len2] = '\0';
-// 	free(s1);
-// 	return (joined);
-// }
-//
