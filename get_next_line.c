@@ -47,7 +47,10 @@ static char	*read_from_file(int fd, char *buffer)
 
 	tmp_buf = malloc((BUFFER_SIZE + 1) * sizeof(char));
 	if (!tmp_buf)
+	{
+		free(buffer);
 		return (NULL);
+	}
 	bytes = 1;
 	result = read_and_append(fd, buffer, tmp_buf, bytes);
 	free (tmp_buf);
@@ -65,9 +68,17 @@ static char	*extract_line(char *buffer)
 	while (buffer[i] && buffer[i] != '\n')
 		i++;
 	if (buffer[i] == '\n')
+	{
 		line = ft_substr(buffer, 0, i + 1);
+		if(!line)
+			return (free(buffer), NULL);
+	}
 	else
+	{
 		line = ft_substr(buffer, 0, i);
+		if(!line)
+			return (free(buffer), NULL);
+	}
 	return (line);
 }
 

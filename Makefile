@@ -43,10 +43,10 @@ testbonus:
 
 # Use with gdb
 gdbtest: 
-	@cc $(SRCS) -g main.c -o output
+	@cc $(SRCS) -g main.c
 
 gdbtestbonus: 
-	@cc $(BONUS_SRCS) -g mainbonus.c -o output
+	@cc $(BONUS_SRCS) -g mainbonus.c
 
 # Used for memory testing
 memorytest: 
