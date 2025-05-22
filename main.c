@@ -27,6 +27,7 @@ int	main(void)
 	while (1)
 	{
 		next_line = get_next_line(fd);
+		close(fd);
 		if (!next_line)
 			break ;
 		count++;

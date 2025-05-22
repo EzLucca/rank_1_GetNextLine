@@ -12,7 +12,7 @@
 
 #include "get_next_line.h"
 
-static char *read_and_append(int fd, char *buffer, char *tmp_buf, ssize_t bytes)
+static char	*read_and_append(int fd, char *buffer, char *tmp_buf, ssize_t bytes)
 {
 	char	*new_buffer;
 
@@ -30,7 +30,7 @@ static char *read_and_append(int fd, char *buffer, char *tmp_buf, ssize_t bytes)
 		new_buffer = ft_strjoin(buffer, tmp_buf);
 		if (!new_buffer)
 		{
-			free(buffer); 
+			free (buffer);
 			return (NULL);
 		}
 		free (buffer);
