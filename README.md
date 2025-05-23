@@ -1,6 +1,6 @@
 # Get Next Line
 
-## Project from 42 school defendet at Hive Helsinki
+## Project from 42 school defended at Hive Helsinki
 
 Repeated calls (e.g., using a loop) to your get_next_line() function should let
 you read the text file pointed to by the file descriptor, one line at a time.
