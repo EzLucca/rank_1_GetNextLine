@@ -70,13 +70,13 @@ static char	*extract_line(char *buffer)
 	if (buffer[i] == '\n')
 	{
 		line = ft_substr(buffer, 0, i + 1);
-		if(!line)
+		if (!line)
 			return (free(buffer), NULL);
 	}
 	else
 	{
 		line = ft_substr(buffer, 0, i);
-		if(!line)
+		if (!line)
 			return (free(buffer), NULL);
 	}
 	return (line);

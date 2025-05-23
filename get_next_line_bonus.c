@@ -22,6 +22,7 @@ static char	*read_and_append(int fd, char *buffer, char *tmp_buf, ssize_t bytes)
 		if (bytes < 0)
 		{
 			free(buffer);
+			buffer = NULL;
 			return (NULL);
 		}
 		if (bytes == 0)
@@ -31,6 +32,7 @@ static char	*read_and_append(int fd, char *buffer, char *tmp_buf, ssize_t bytes)
 		if (!new_buffer)
 		{
 			free (buffer);
+			buffer = NULL;
 			return (NULL);
 		}
 		free (buffer);
@@ -49,6 +51,7 @@ static char	*read_from_file(int fd, char *buffer)
 	if (!tmp_buf)
 	{
 		free(buffer);
+		buffer = NULL;
 		return (NULL);
 	}
 	bytes = 1;
@@ -70,14 +73,14 @@ static char	*extract_line(char *buffer)
 	if (buffer[i] == '\n')
 	{
 		line = ft_substr(buffer, 0, i + 1);
-		if(!line)
-			return (free(buffer), NULL);
+		if (!line)
+			return (free(buffer), buffer = NULL, NULL);
 	}
 	else
 	{
 		line = ft_substr(buffer, 0, i);
-		if(!line)
-			return (free(buffer), NULL);
+		if (!line)
+			return (free(buffer), buffer = NULL, NULL);
 	}
 	return (line);
 }
@@ -92,6 +95,7 @@ static char	*update_buffer(char *buffer)
 	if (!newline_ptr)
 	{
 		free(buffer);
+		buffer = NULL;
 		return (NULL);
 	}
 	rest_len = ft_strlen(newline_ptr + 1);
@@ -99,6 +103,7 @@ static char	*update_buffer(char *buffer)
 	if (!rest_of_line)
 	{
 		free(buffer);
+		buffer = NULL;
 		return (NULL);
 	}
 	free(buffer);
@@ -116,7 +121,11 @@ char	*get_next_line(int fd)
 	{
 		buffer[fd] = malloc(1);
 		if (!buffer[fd])
+		{
+			free(buffer[fd]);
+			buffer[fd] = NULL;
 			return (NULL);
+		}
 		buffer[fd][0] = '\0';
 	}
 	buffer[fd] = read_from_file(fd, buffer[fd]);

@@ -1,40 +1,40 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: edlucca <edlucca@student.hive.fi>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/14 10:26:12 by edlucca           #+#    #+#             */
-/*   Updated: 2025/05/19 13:53:34 by edlucca          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-#include <stdio.h>
 #include <fcntl.h>
+#include <stdio.h>
+#include <string.h>
+
 #include "get_next_line.h"
 
-int	main(void)
+int main(int argc, char **argv)
 {
-	int		fd;
-	char	*next_line;
-	int		count;
+	// Open all files passed on the command line.
+	int file_count = argc - 1;
+	int files[file_count + 1];
+	if (argc > 1) {
+		for (int i = 0; i < file_count; i++)
+			files[i] = open(argv[i + 1], O_RDONLY);
 
-	count = 0;
-	fd = open("lord.txt", O_RDONLY);
-	if (fd == -1)
-		return (1);
-	while (1)
-	{
-		next_line = get_next_line(fd);
-		close(fd);
-		if (!next_line)
-			break ;
-		count++;
-		printf("[%d] -> %s", count, next_line);
-		free (next_line);
-		next_line = NULL;
+	// Use standard input if no files were given.
+	} else {
+		files[0] = 0;
+		file_count = 1;
 	}
-	close(fd);
-	return (0);
+
+	// Keep track of how many files are active.
+	int active_count = file_count;
+	char file_is_active[file_count];
+	memset(file_is_active, 1, sizeof(file_is_active));
+
+	// Cycle between active files, printing one line from each.
+	for (int i = 0; active_count > 0; i = (i + 1) % file_count) {
+		if (file_is_active[i]) {
+			char *line = get_next_line(files[i]);
+			if (line == NULL) {
+				file_is_active[i] = 0;
+				active_count--;
+			} else {
+				printf("%s", line);
+				free(line);
+			}
+		}
+	}
 }

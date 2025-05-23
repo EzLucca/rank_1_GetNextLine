@@ -7,9 +7,9 @@ CFLAGS = -Wall -Wextra -Werror
 
 SRCS = get_next_line.c get_next_line_utils.c 
 
-BONUS_SRCS = get_next_line_bonus.c get_next_line_utils.c
+BONUS_SRCS = get_next_line_bonus.c get_next_line_utils_bonus.c
 
-MEMORY = -g -fsanitize=address,undefined
+# MEMORY = -g -fsanitize=address,undefined
 
 C_OBJECTS = $(SRCS:.c=.o)
 .SECONDARY: ${C_OBJECTS}
@@ -32,30 +32,31 @@ re: fclean all
 
 # Used for testing
 test: 
-	@cc $(SRCS) main.c -o output
-	@./output
-	@rm -f output
+	@cc $(SRCS) main.c
+	@./a.out lord.txt
+	@rm -f a.out
 
 testbonus: 
-	@cc $(BONUS_SRCS) mainbonus.c -o output
-	@./output
-	@rm -f output
+	@cc $(BONUS_SRCS) main.c
+	@./a.out lord.txt rings.txt
+	@rm -f a.out
 
 # Use with gdb
 gdbtest: 
-	@cc $(SRCS) -g main.c
+	cc $(SRCS) -g main.c
 
 gdbtestbonus: 
-	@cc $(BONUS_SRCS) -g mainbonus.c
+	cc $(BONUS_SRCS) -g main.c
 
 # Used for memory testing
-memorytest: 
-	@cc $(MEMORY) $(SRCS) main.c -o output
-	@./output
-	@rm -f output
+valgrindtest:
+	@cc $(SRCS) -g main.c
+	@valgrind -s --leak-check=full --show-leak-kinds=all --track-origins=yes ./a.out lord.txt
+	@rm -f ./a.out 
+	
+valgrindtestbonus:
+	@cc $(BONUS_SRCS) -g main.c
+	@valgrind -s --leak-check=full --show-leak-kinds=all --track-origins=yes ./a.out lord.txt rings.txt
+	@rm -f ./a.out 
 
-memorytestbonus: 
-	@cc $(MEMORY) $(BONUS_SRCS) mainbonus.c -o output
-	@./output
-	@rm -f output
-.PHONY: all clean fclean re bonus test testbonus gdbtest gdbtestbonus memorytest memorytestbonus
+.PHONY: all clean fclean re bonus test testbonus gdbtest gdbtestbonus valgrindtest valgrindtestbonus
